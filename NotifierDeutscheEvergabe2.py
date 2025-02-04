@@ -93,7 +93,7 @@ def extract_titles_with_selenium(url):
         for i, element in enumerate(title_elements, start=1):
             try:
                 title = element.text.strip()
-                link = element.get_attribute("href")
+                link = " "
                 if title:
                     extracted_data.append({"title": title, "link": link})
                     print(f"Extracted {i}: Title: {title}, Link: {link}")
@@ -114,17 +114,16 @@ def send_email(new_matches):
     body = "Die folgenden neuen Übereinstimmungen wurden gefunden:\n\n"
     
     for match in new_matches:
-        title = match.get("title", "No Title")
+        title = match.get("part", "No Title")
         link = match.get("link", "No Link")
-        body += f"Title: {title}\nLink: {link}\n\n"
-
+        body += f"Title: {title}\nLink: https://www.auftraege.bayern.de/Dashboards/Dashboard_off?BL=09\n\n"
+    
     try:
         yag = yagmail.SMTP(EMAIL_ADDRESS, EMAIL_PASSWORD)
         yag.send("Henrik.Hemmer@flc-group.de", subject, body)
         print("Email sent!")
     except Exception as e:
         print(f"Failed to send email: {e}")
-
 def main():
     """Main function to check websites and send emails."""
     previous_matches = load_previous_matches()
